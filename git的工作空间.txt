@@ -122,10 +122,17 @@ bitbucket管理源代码，也需要认证。
 |--猜想：若是我重新部署eclipse的ssh
   |--在github的web下，有ssh'的添加。因此：在此把eclipse生成的公钥加上，然后在eclipse中配置好私钥，那么在以后再向github中推送的时候就不需要用户名密码认证了。
 
-所谓的改变历史，就是把提交历史重新合并喝着可能删除。
+所谓的改变历史，就是把提交历史重新合并也可能删除。
 |--git reset --soft commitId        回到某个提交
 |--git commit -m"merge"             合并提交
-|--git logn                         查看提交历史。如果回到的是第一个提交，那么你将看到： commitId merge 说明只剩下一个了。
+|--git logn                         查看提交历史。如果回到的是第一个提交，那么你将看到： commitId merge 和第一个提交。说明只剩下二个了。
+
+试图改变历史，然后进行push，可是不成功。原因是可能带有tag。提示先pull然后再push。
+另外一个问题：github服务器的资源 A，demo的第一次创建的资源 B，第一次clone在demo1下的资源 C。下面代表的一些push和pull操作。
+  push          push            pull          pull
+C----->B (no)  C----->A (ok)  B----->C (no) B----->A (ok) 
+奇怪的是：怎么感觉好像A成了origin/master，而B和C成了下源。   
+
 
 
 
