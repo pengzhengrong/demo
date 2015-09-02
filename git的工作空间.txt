@@ -1,0 +1,131 @@
+﻿在git提交环节有3个部分：working tree（本地工作区），index file（索引区），commit（本地仓库）。
+|--git init demo         创建git资源库,在资源库下面创建txt，写上a,保存
+  |--git add .           将txt添加到暂存区，此时的工作区不会提示“工作区干净”
+  |--git commit -m"message" 将txt提交到本地。此时工作区提示“工作区干净”
+    |--git status        将会显示此时：位于分支master，干净的工作区
+    |--git diff          对比工作区和索引区。
+    |--git diff head     对比工作区和本地仓库
+    |--git diff --cached 对比索引区和本地仓库  显示都是没有差异
+      |--编写txt，写上b，保存
+    |--git diff          工作区：ab，索引区a
+    |--git diff head     工作区：ab，本地仓库a
+    |--git diff cached   索引区      本地仓库  没有区别
+  |--git add .           将b提交至索引区  
+    |--git diff          工作区：ab，索引区ab  没有区别
+    |--git diff head     工作区：ab，本地仓库a
+    |--git diff cached   索引区：ab，本地仓库a
+    |--git status        引入暂存区：在输入此命令，会提示：此时位于分支master，需提交分支：first.txt 可以键入git reset head .退出暂存区
+                         此时键入 --git reset head .|--git checkout .  索引区：a 工作区：a 本地仓库：a 所以引入：暂存区==索引区（暂存区的概念并非如此简单，需要继续深究）
+  |--git commit -m"second commit" 再次键入3次差异：无任何差异。 此时的工作区：ab
+
+master在开发的过程当中是一个不断向前推进的过程。
+
+分支的引入
+|--git branch firstBranch       创建第一个分支firstBranch
+|--git checkout firstBranch     切换到当前的分支。在master已经搭好基本的框架的时候，那么可以分配给开发小组进行开发的过程。eg：A-->firstBranch A在当前的分支下开发
+|--编辑txt，abc 保存 假设此时A正在开发中，突然说master需要修改，但是又不想add，怎么办呢？
+|--git stash                    此命令相当于：我把正在玩的游戏保存一下，等会再回来继续玩。  
+|--git stash pop                此命令就是已经把master的问题解决了之后，再次切换回来继续编写代码。 
+|--git add .
+|--git commit -m"firstBranch 1" 表示firstBranch的第一次提交
+|--git checkout master          切换到主分支，准备把firstBranch的内容拉过来
+|--git merge firstBranch        此时本地仓库：abc  此时的firstBranch 已经开发完成或者说根本用不上了，那么可以把这个分支删除
+|--git branch -d firstBranch    可以用--git branch -a 来查看此时的所有分支 -d删除分支
+
+虽然以上讲的这么多，可是一直都没有引入远程仓库的概念
+远程仓库：(上面的操作在目录demo1下操作，现在的工作目录在demo2下操作)
+|--git clone demo1/.git         克隆
+|--git status                   当前处于master分支，当前分支与上游分支origin/master一样。在此，已经引入了远程仓库的概念了。
+|--此时修改txt， abc 在第二行再添加 1 
+|--git add .                    在此和下面的commit通过diff可以查看差异。
+|--此时修改txt，abc [1] (A)     []表示add但是没commit，（）表示没有add和commit 
+|--git commit -m"add 1"         提交 abc 1 (A)
+|--git status                   提示：当前master分支领先origin/master一次提交。（可以想象为：开发工作中已经开发完一次提交本地仓库了）
+|--如果此时的工作确定不要了，可以 --git reset HEAD filename |--git checkout .
+|--git add .                    把当前的A加入暂存区，然后在后来发现不需要，或者只是个测试，那么从暂存区撤销
+    |--git diff                 工作区 abc 1 A  暂存区（索引区） abc 1 A  本地仓库 abc 1
+|--git reset head .             工作区 abc 1 A  暂存区（索引区） abc 1    本地仓库 abc 1   从暂存区撤销了A
+|--git add .                    加入暂存
+|--git checkout .               结果会怎样？不会有任何的反应。  那么是不是因为不是分支？abc 1 (A)
+|--git reset head .             继续撤销A，然后添加分支 但是A在工作区，而又不想提交到暂存区。
+|--git stash                    保存进度完毕
+|--git branch second secondBranch
+|--git checkout secondBranch    添加分支 
+|--git status                   无文件要提交，干净的工作区。现在的txt： abc 1
+|--编辑txt，add：abcd 123       --git status 提示：--git checkout filename 丢弃工作区的改动
+|--git add . 
+|--git commit -m"add d 23"      工作区：abcd 123 暂存区 abcd 123 本地仓库 abcd 123  不过此时是在secondBranch分支
+|--git checkout master
+|--git merge secondBranch       master合并secondBranch分支。
+|--git stash pop                发生冲突。abcd 123  和 abcd 123 (A)  该怎么解决呢？
+   
+
+ -------       --------
+|master | <-- |master1 | \                  ==>git merge branch 提示冲突
+ -------       --------      -------- 
+    |                       | master |
+ -------       -------       --------
+|branch | <-- |branch1|  /  
+ -------       -------
+模拟：1个用户修改1个文件的不同位置。
+      2个用户修改2个文件
+      2个用户修改1个文件的不同位置。 user1:push origin/master  user2:--git fetch --git meger origin/master --git push  非快进式冲突
+
+
+ 
+|--git diff -w                查看异常（这次的异常主要是因为在master分支保存进度后，然后在合并secondBranch分支，导致读取进度的时候出现冲突。通过手动删除解决了冲突。那么应该怎么才能避免这样的冲突呢？）
+|--git checkout secondBranch  情景还原，在当前分支修改txt
+|--修改txt abcd(e) 123(4)
+|--git add .
+|--git commit -m"add e 4"
+|--git checkout master        开始以为能够切回master，然后通过--git fetch 和 --git merge 不会引起冲突。可是git fetch secondBranch报错：secondBranch不是git repository
+                              继续尝试：--git stash pop --git merge secondBranch 还是会报错。提示：先让我提交，要么先保存进度，然后在merge。在保存进度merge，会冲突。
+|--git stash pop
+|--git add .                  先添加至暂存区。
+|--git merge secondBranch     提示我先commit 或者stash 
+|--git commit -m"add A"       提交进度
+|--git merge secondBranch     冲突master修改txt，secondBranch修改txt。
+|--git status                 提示：双方修改txt
+|--再一次手动修改。
+|--git add .
+|--git commit -m"add A"       txt: abcd 123 A
+在冲突方面存在着问题，需要在实践当中多加积累
+
+|--git reset --soft           回到某个提交，并且把之后的提交内容也会带过来。eg: a<--b<--c<--d 
+|--git reset --soft a         回到a点，但是bcd提交的值在这里都还会保存下来。  
+|--git reset --hard           当这时回到a点，那么bcd的值都会丢失。
+
+|--git status -s              会出现两列MM： 第一列M：版本库vs处理中间状态  中间状态=工作区+暂存区？ 版本库=本地仓库？  工作区=暂存区!=本地仓库 第一列M出现
+                                             第二列M：工作区vs当前文件      修改当前文件 不add 出现第二列M
+|--git clone --bare path/.git path2/.git     创建裸版本
+
+
+
+目前为止，都还未提及ssh。因为对ssh还一点都不了解。只知道ssh认证后可以无需密码登入而直接通过认证。可是ssh生成的私钥和密钥必须有所部署。但是部署在哪里呢？什么情况下需要呢？
+github是开源的管理项目平台，无需认证。
+gitolite需要认证。
+bitbucket管理源代码，也需要认证。
+
+对ssh引入的猜想：
+|--首先，我在本地安装了github for window用来直观的查看在cygwin下对git的管理。
+  |--在web页面也可以打开github而且直观的看见管理的资源。
+|--回到cygwin，创建资源库SpringMVC的.git，然后导入一个项目。
+  |--再创建一个目录spring，clone远程资源到此目录。
+    |--此时的远程资源才可以作为远程资源了。原因是因为它已经作为spring的直接上源upstream。发布到github。
+|--在github上面显示的记录少了主要的代码。
+  |--回到SpringMVC，然后直接 git push https://github.com/pengzhengrong/SpringMVC.git 
+    |--需要登入github的：登入名 密码。 认证从此就相当于引入了。
+      |--输入登入名和密码，推送成功。
+|--回到eclipse，clone https://github.com/pengzhengrong/SpringMVC.git。
+  |--转换为maven项目，然后add，commit，push。
+    |--push的时候也需要登入名和密码。认证再一次引入。（我的eclipse已经认证过公司的ssh，所以在此没做重新部署ssh。）
+|--猜想：若是我重新部署eclipse的ssh
+  |--在github的web下，有ssh'的添加。因此：在此把eclipse生成的公钥加上，然后在eclipse中配置好私钥，那么在以后再向github中推送的时候就不需要用户名密码认证了。
+
+
+
+
+
+
+
+
