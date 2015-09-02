@@ -122,8 +122,10 @@ bitbucket管理源代码，也需要认证。
 |--猜想：若是我重新部署eclipse的ssh
   |--在github的web下，有ssh'的添加。因此：在此把eclipse生成的公钥加上，然后在eclipse中配置好私钥，那么在以后再向github中推送的时候就不需要用户名密码认证了。
 
-
-
+所谓的改变历史，就是把提交历史重新合并喝着可能删除。
+|--git reset --soft commitId        回到某个提交
+|--git commit -m"merge"             合并提交
+|--git logn                         查看提交历史。如果回到的是第一个提交，那么你将看到： commitId merge 说明只剩下一个了。
 
 
 
