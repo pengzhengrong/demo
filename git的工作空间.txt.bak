@@ -133,18 +133,6 @@ bitbucket管理源代码，也需要认证。
 C----->B (no)  C----->A (ok)  B----->C (no) B----->A (ok) 
 奇怪的是：怎么感觉好像A成了origin/master，而B和C成了下源。   
 
-对于后期用ssh的时候，成功在eclipse中配置。步骤也就是在github中存了ssh的publickey，然后再eclipse中存私钥。
-但是现在忘了是不是上面的步骤了。
-有段时间没有用git了，所以现在又忘记了。对于git的知识还记得多少呢？
-|--git init demo
-|--git add .
-  |--git diff 查看工作区和索引区的不同
-  |--git diff head 查看工作区和本地仓库
-  |--git diff --cache 查看索引区和本地仓库的不同
-|--git commit -m "1"
-  |--git diff 
-  |--git diff head
-
 
 
 
