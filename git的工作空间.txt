@@ -151,5 +151,5 @@ C----->B (no)  C----->A (ok)  B----->C (no) B----->A (ok)
 |--git reset 节点  Hard  ？
 |--git checkout . 清空add的索引区？
 
-
-
+|--git reset --hard 清空git的工作区
+|--git reset head . 只会清空暂存区，工作去的内容保留
