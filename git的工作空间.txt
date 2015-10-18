@@ -144,9 +144,12 @@ C----->B (no)  C----->A (ok)  B----->C (no) B----->A (ok)
 |--git commit -m "1"
   |--git diff 
   |--git diff head
+|--git diff HEAD 在cygwin中head没有区分大小写，但是在ubuntu下的终端区分大小写。
 
-
-
+1：如何配置ssh，使我在推送push的时候，不再需要输入密码和用户名，直接就能认证我呢？类似CRT，配置ssh后在进行连接时，不再需要密码连接。
+2：如果已经add了，那么如何放弃当前的add然后回到干净的工作区呢？或者直接放弃当前的工作呢？
+|--git reset 节点  Hard  ？
+|--git checkout . 清空add的索引区？
 
 
 
