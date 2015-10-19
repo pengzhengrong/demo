@@ -154,3 +154,11 @@ C----->B (no)  C----->A (ok)  B----->C (no) B----->A (ok)
 
 |--git reset --hard 清空git的工作区
 |--git reset head . 只会清空暂存区，工作去的内容保留
+
+
+1：在ubuntu下生成了ssh，然后把这个ssh的私钥放置ssh管理器。在github中配置ssh的公钥。
+2：github有2中选择：
+（1）https的地址
+（2）ssh连接的地址。选择这个
+3：在github中新建项目同名的资源。
+4：在终端git init 然后add commit 。在推送push。
