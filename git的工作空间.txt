@@ -1,3 +1,43 @@
+-----------------------------------------------
+git 基本操作
+|-- git clone https://git.oschina.net/qnkjdev1/learnGit.git
+|-- git add .
+|-- git commit -m"push by pzr"
+|-- git push https://git.oschina.net/qnkjdev1/learnGit.git
+
+git 分支
+|-- git branch pzr
+|-- git add .
+|-- git commit -m "pzr branch"
+|-- git checkout master
+|-- git merge pzr  //合并pzr分支
+|-- git branch -d pzr  //删除pzr分支
+
+git 的3个空间
+1. 工作空间
+2. 暂存空间
+3. 本地仓库
+|-- git status  		      //提示干净的工作空间
+|-- git diff 	  		      //查看工作空间和暂存空间的区别
+|-- git diff HEAD       //查看工作空间和本地仓库的区别
+|-- git diff --cached  //查看暂存空间和本地仓库的区别
+
+git 放弃编辑内容
+|-- #add content && git checkout .   // the content will be removed;
+	|-- git checkout .                            //迫使git 将当前的工作空间删除然后以本地仓库的内容替换
+|-- #add content &&  git checkout . 	//一旦add 之后,那么 git checkout . 将不会放弃工作空间的内容
+|-- git reset HEAD .                            //放弃当前的暂存区,此时暂存区为空. 如果这时候再执行 git checkout . ,那么将使工作空间的修改清空
+|-- git commit -m"how to remove"   //git reset --hard commitId 可以将commit后的内容强制 退回到某个提交的记录
+|-- git log 										   //查看提交的历史记录
+|-- git reset --hard 878f18c951074d1e1e60767c3624e8c14b3216fc   //强制性的将本地仓库倒退了
+	|-- 需要注意的是,一旦强制回滚,那么在回滚的记录和当前的记录区间的提交都会被丢失,无法恢复
+|-- git reset --soft commitId 			  // 软性的回滚到某个提交点,但是之前的记录不会丢失.
+
+git 标签
+|-- git tag 1.0.0 commitId                //标签
+
+------------------------------------------------
+
 ﻿在git提交环节有3个部分：working tree（本地工作区），index file（索引区），commit（本地仓库）。
 |--git init demo         创建git资源库,在资源库下面创建txt，写上a,保存
   |--git add .           将txt添加到暂存区，此时的工作区不会提示“工作区干净”
